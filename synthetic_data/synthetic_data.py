@@ -91,15 +91,15 @@ def transform_to_distribution(x, adict):
         adict["kwargs"] = {}
 
     # DP categoricals will be multinomial
-    if adict["dist"] in ["multinomial", "norm", "skewnorm"]:
-        method_gen = getattr(stats, adict["dist"])
-        method_specific = method_gen(*adict["args"], **adict["kwargs"])
-        if adict["dist"] == "multinomial":
-            x_samples = multinomial_ppf(x, method_specific, adict["categories_info"])
-        else:
-            x_samples = method_specific.ppf(x)
+    # if adict["dist"] in ["multinomial", "norm", "skewnorm"]:
+    method_gen = getattr(stats, adict["dist"])
+    method_specific = method_gen(*adict["args"], **adict["kwargs"])
+    if adict["dist"] == "multinomial":
+        x_samples = multinomial_ppf(x, method_specific, adict["categories_info"])
     else:
-        x_samples = adict["args"].ppf(x)
+        x_samples = method_specific.ppf(x)
+    # else:
+    #     x_samples = adict["args"].ppf(x)
 
     return x_samples
 
